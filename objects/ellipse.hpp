@@ -20,9 +20,9 @@ public:
         auto pointer = to_pointer(frame_name, is_dynamic);
         std::stringstream ss;
         ss << Object::to_init_code(frame_name, is_dynamic);
-        ss << std::format("    {}width = {}\n", pointer, std::round(lineWidth));
-        ss << std::format("    {}rx = {}\n", pointer, rx);
-        ss << std::format("    {}ry = {}\n", pointer, ry);
+        ss << std::format("    {}width = {};\n", pointer, std::round(lineWidth));
+        ss << std::format("    {}rx = {};\n", pointer, std::round(rx));
+        ss << std::format("    {}ry = {};\n", pointer, std::round(ry));
         return ss.str();
     }
 };

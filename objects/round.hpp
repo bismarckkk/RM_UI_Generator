@@ -20,8 +20,8 @@ public:
         auto pointer = to_pointer(frame_name, is_dynamic);
         std::stringstream ss;
         ss << Object::to_init_code(frame_name, is_dynamic);
-        ss << std::format("    {}width = {}\n", pointer, std::round(lineWidth));
-        ss << std::format("    {}r = {}\n", pointer, r);
+        ss << std::format("    {}width = {};\n", pointer, std::round(lineWidth));
+        ss << std::format("    {}r = {};\n", pointer, std::round(r));
         return ss.str();
     }
 };

@@ -19,14 +19,14 @@ enum class ObjectType {
 };
 
 NLOHMANN_JSON_SERIALIZE_ENUM(ObjectType, {
-    {ObjectType::UiArc, "arc"},
-    {ObjectType::UiRound, "round"},
-    {ObjectType::UiRect, "rect"},
-    {ObjectType::UiLine, "line"},
-    {ObjectType::UiEllipse, "ellipse"},
-    {ObjectType::UiText, "text"},
-    {ObjectType::UiNumber, "number"},
-    {ObjectType::UiFloat, "float"}
+    {ObjectType::UiArc, "UiArc"},
+    {ObjectType::UiRound, "UiRound"},
+    {ObjectType::UiRect, "UiRect"},
+    {ObjectType::UiLine, "UiLine"},
+    {ObjectType::UiEllipse, "UiEllipse"},
+    {ObjectType::UiText, "UiText"},
+    {ObjectType::UiNumber, "UiNumber"},
+    {ObjectType::UiFloat, "UiFloat"}
 })
 
 inline std::string to_string(ObjectType type) {

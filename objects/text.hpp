@@ -28,10 +28,10 @@ public:
         auto pointer = to_pointer(frame_name, is_dynamic);
         std::stringstream ss;
         ss << Object::to_init_code(frame_name, is_dynamic);
-        ss << std::format("    {}width = {}\n", pointer, std::round(fontSize / 10.));
-        ss << std::format("    {}font_size = {}\n", pointer, std::round(fontSize));
-        ss << std::format("    {}str_length = {}\n", pointer, text.length());
-        ss << std::format("    strcpy({}->string, \"{}\");\n", pointer, text);
+        ss << std::format("    {}width = {};\n", pointer, std::round(fontSize / 10.));
+        ss << std::format("    {}font_size = {};\n", pointer, std::round(fontSize));
+        ss << std::format("    {}str_length = {};\n", pointer, text.length());
+        ss << std::format("    strcpy({}string, \"{}\");\n", pointer, text);
         return ss.str();
     }
 };

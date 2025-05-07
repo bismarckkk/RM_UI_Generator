@@ -38,6 +38,7 @@ extern uint8_t ui_{{ frame }}_dirty_string[{{ length(textObjs) }}];
 ## for obj in objs
 #define {{ obj.name }}_dirty (ui_{{ frame }}_dirty_figure[{{ loop.index }}])
 ## endfor
+
 ## for obj in textObjs
 #define {{ obj.name }}_dirty (ui_{{ frame }}_dirty_string[{{ loop.index }}])
 ## endfor

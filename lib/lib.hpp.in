@@ -1,0 +1,20 @@
+//
+// Created by bismarckkk on 2025/5/7.
+//
+
+#ifndef LIB_HPP
+#define LIB_HPP
+
+inline const char* ui_types_h_dynamic = R"(${UI_TYPES_H_DYNAMIC_CONTENT})";
+
+inline const char* ui_types_h_static = R"(${UI_TYPES_H_STATIC_CONTENT})";
+
+inline const char* ui_interface_h_dynamic = R"(${UI_INTERFACE_H_DYNAMIC_CONTENT})";
+
+inline const char* ui_interface_h_static = R"(${UI_INTERFACE_H_STATIC_CONTENT})";
+
+inline const char* ui_interface_c_dynamic = R"(${UI_INTERFACE_C_DYNAMIC_CONTENT})";
+
+inline const char* ui_interface_c_static = R"(${UI_INTERFACE_C_STATIC_CONTENT})";
+
+#endif //LIB_HPP
