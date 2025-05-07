@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 function(read_file path var)
     file(READ ${path} content)
-#    string(REPLACE "\\" "\\\\"  content "${content}")
     set(${var} "${content}" PARENT_SCOPE)
 endfunction()
 
@@ -30,3 +29,9 @@ add_executable(
 )
 target_compile_definitions(rm_ui_generator PUBLIC -DJSON_DISABLE_ENUM_SERIALIZATION=1)
 target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/inc)
+
+if (MSVC)
+    target_compile_options(rm_ui_generator PRIVATE $<$<CONFIG:Release>:/MT> $<$<CONFIG:Debug>:/MTd>)
+elseif (MINGW)
+    target_link_options(rm_ui_generator PRIVATE -static -static-libgcc -static-libstdc++)
+endif ()
