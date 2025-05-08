@@ -52,7 +52,7 @@ jobs:
           token: ${{ secrets.TOKEN }}
 
   build_linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       linux_sha1: ${{ steps.hash.outputs.sha1 }}
       linux_url: ${{ steps.set_url.outputs.url }}
