@@ -29,7 +29,7 @@ ui_{{ split.message_len }}_frame_t ui_{{ split_name }};
 {{ obj.type }} *{{ obj.name }} = ({{ obj.type }}*)&(ui_{{ split_name }}.data[{{ loop.index }}]);
 ## endfor
 
-inline void _ui_init_{{ split_name }}() {
+void _ui_init_{{ split_name }}() {
     for (int i = 0; i < {{ length(split.objs) }}; i++) {
         ui_{{ split_name }}.data[i].figure_name[0] = {{ frame_id }};
         ui_{{ split_name }}.data[i].figure_name[1] = {{ group.id }};
@@ -48,7 +48,7 @@ inline void _ui_init_{{ split_name }}() {
     SEND_MESSAGE((uint8_t *) &ui_{{ split_name }}, sizeof(ui_{{ split_name }}));
 }
 
-inline void _ui_update_{{ split_name }}() {
+void _ui_update_{{ split_name }}() {
     for (int i = 0; i < {{ length(split.objs) }}; i++) {
         ui_{{ split_name }}.data[i].operate_type = 2;
     }
@@ -57,7 +57,7 @@ inline void _ui_update_{{ split_name }}() {
     SEND_MESSAGE((uint8_t *) &ui_{{ split_name }}, sizeof(ui_{{ split_name }}));
 }
 
-inline void _ui_remove_{{ split_name }}() {
+void _ui_remove_{{ split_name }}() {
     for (int i = 0; i < {{ length(split.objs) }}; i++) {
         ui_{{ split_name }}.data[i].operate_type = 3;
     }
