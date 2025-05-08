@@ -118,7 +118,7 @@ jobs:
               -e "s|<linux_download_sha1>|${{ needs.build_linux.outputs.linux_sha1 }}|g" \
               -e "s|<source_code_link>|https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.zip|g" \
               -e "s|<source_code_sha1>|${{ steps.source_hash.outputs.sha1 }}|g" \
-              addUiTemplate.cmake > addUI.cmake
+              addUITemplate.cmake > addUI.cmake
 
       - name: Upload addUI.cmake
         uses: softprops/action-gh-release@v1
