@@ -26,7 +26,7 @@
      如果你的平台在预购建支持范围以内，则需要在release中下载对应的可执行文件；如果没有对应的预购建，则需要自行下载源码编译  
      然后将可执行文件重命名为`rm_ui_generator(.exe)`，并放置在cmake构建目录下，这样生成器就可以在无网络的情况下工作了  
    
-2. 生成
+2. 生成  
     首先建议在集成的`include`指令前设置`ui_output_dir`变量，ui代码文件将在`${ui_output_dir}/${target}`目录下生成  
     例如：如果想要在根目录的ui文件夹下生成ui代码，则需要将`ui_output_dir`设置为`${CMAKE_CURRENT_SOURCE_DIR}`，
     并且ui的`target`名称需要设置为`ui`  
@@ -38,13 +38,13 @@
     * `<type>`: 目标类型，支持`dynamic`和`static`两种类型，对应静态版和动态版代码
     * `<ui_file>`: rmui文件路径，支持相对路径和绝对路径，相对路径以当前cmake文件路径起始
     * `<frame>`: 可选参数，要生成的frame的名称，留空为`default`
-3. 链接
+3. 链接  
     生成的ui代码需要链接到你的工程中，链接方式和普通的cmake目标一样，使用`target_link_libraries`指令即可
     ```cmake
     target_link_libraries(<your_target> <ui_target>)
     ```
     在链接以后，`ui_output_dir`目录将被自动添加到`include`路径，使用`#include "<target>/ui.h"`即可访问到ui
-4. 使用
+4. 使用  
     具体使用与ui生成器生成代码相同，详见[动态版使用指南](https://bbs.robomaster.com/article/580951)和
     [静态版使用指南](https://bbs.robomaster.com/article/558118)  
     唯一需要注意的是由于代码可能重复生成，建议只修改`ui_types.h`和`ui_interface.h`中被`// User Code`包裹的部分，
