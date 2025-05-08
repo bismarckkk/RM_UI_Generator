@@ -17,14 +17,14 @@ inline const std::string ui_frame_h_template = R"(//
 
 #include "ui_interface.h"
 
-#if {{ length(objs) }} != 0
+## if length(objs) != 0
 extern ui_interface_figure_t ui_{{ frame }}_now_figures[{{ length(objs) }}];
 extern uint8_t ui_{{ frame }}_dirty_figure[{{ length(objs) }}];
-#endif
-#if {{ length(textObjs) }} != 0
+## endif
+## if length(textObjs) != 0
 extern ui_interface_string_t ui_{{ frame }}_now_strings[{{ length(textObjs) }}];
 extern uint8_t ui_{{ frame }}_dirty_string[{{ length(textObjs) }}];
-#endif
+## endif
 
 ## for obj in objs
 #define {{ obj.name }} (({{ obj.type }}*)&(ui_{{ frame }}_now_figures[{{ loop.index }}]))
