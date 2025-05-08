@@ -20,7 +20,7 @@
      )
      include(${addUIPath})
      ```
-   * 或者你也可以在release中下载心仪版本的`addUI.cmake`文件到工程目录，然后在主CMakeLists.txt中`include`该文件即可
+   * 或者你也可以在release中下载心仪版本的`addUI.cmake`文件到工程目录，然后在主CMakeLists.txt中`include`该文件即可，
      这种方式可以在无网络连接的情况下正常工作（还需要额外设置）  
      如果你需要在无网络连接的情况下工作，你还需要下载一些额外文件  
      如果你的平台在预购建支持范围以内，则需要在release中下载对应的可执行文件；如果没有对应的预购建，则需要自行下载源码编译  
