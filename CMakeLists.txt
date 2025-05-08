@@ -26,6 +26,7 @@ add_executable(
         objects/objects.cpp
         generators/dynamic.cpp
         generators/static.cpp
+        utils/utils.cpp
 )
 target_compile_definitions(rm_ui_generator PUBLIC -DJSON_DISABLE_ENUM_SERIALIZATION=1)
 target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/inc)

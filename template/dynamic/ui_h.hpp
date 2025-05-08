@@ -2,8 +2,8 @@
 // Created by abc55 on 2025/5/7.
 //
 
-#ifndef UI_H_HPP
-#define UI_H_HPP
+#ifndef UI_H_DYNAMIC_HPP
+#define UI_H_DYNAMIC_HPP
 
 #include <string>
 
@@ -30,5 +30,4 @@ extern "C" {
 
 #endif // UI_H
 )";
-
-#endif //UI_H_HPP
+#endif //UI_H_DYNAMIC_HPP

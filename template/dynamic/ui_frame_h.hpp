@@ -2,8 +2,8 @@
 // Created by abc55 on 2025/5/7.
 //
 
-#ifndef UI_FRAME_H_HPP
-#define UI_FRAME_H_HPP
+#ifndef UI_FRAME_H_DYNAMIC_HPP
+#define UI_FRAME_H_DYNAMIC_HPP
 
 #include <string>
 
@@ -50,4 +50,4 @@ void ui_update_{{ frame }}();
 #endif // UI_{{ frame }}_H
 )";
 
-#endif //UI_FRAME_H_HPP
+#endif //UI_FRAME_H_DYNAMIC_HPP

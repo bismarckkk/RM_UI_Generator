@@ -9,7 +9,7 @@
 #define MESSAGE_PACKED __attribute__((packed))
 #include <stdint.h>
 #else
-#define MESSAGE_PACKED
+#error "MESSAGE_PACKED not defined for this compiler"
 #endif
 
 #define PRIMITIVE_CAT(x, y) x ## y
