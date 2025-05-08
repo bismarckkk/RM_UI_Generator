@@ -76,7 +76,7 @@ void _ui_remove_{{ split_name }}() {
 ui_string_frame_t ui_{{ split_name }};
 ui_interface_string_t* {{ split.obj.name }} = &(ui_{{ split_name }}.option);
 
-inline void _ui_init_{{ split_name }}() {
+void _ui_init_{{ split_name }}() {
     ui_{{ split_name }}.option.figure_name[0] = {{ frame_id }};
     ui_{{ split_name }}.option.figure_name[1] = {{ group.id }};
     ui_{{ split_name }}.option.figure_name[2] = {{ split.start_id }};
@@ -88,14 +88,14 @@ inline void _ui_init_{{ split_name }}() {
     SEND_MESSAGE((uint8_t *) &ui_{{ split_name }}, sizeof(ui_{{ split_name }}));
 }
 
-inline void _ui_update_{{ split_name }}() {
+void _ui_update_{{ split_name }}() {
     ui_{{ split_name }}.option.operate_type = 2;
 
     ui_proc_string_frame(&ui_{{ split_name }});
     SEND_MESSAGE((uint8_t *) &ui_{{ split_name }}, sizeof(ui_{{ split_name }}));
 }
 
-inline void _ui_remove_{{ split_name }}() {
+void _ui_remove_{{ split_name }}() {
     ui_{{ split_name }}.option.operate_type = 3;
 
     ui_proc_string_frame(&ui_{{ split_name }});
