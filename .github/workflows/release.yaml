@@ -94,23 +94,35 @@ jobs:
           files: rm_ui_generator_linux_x64
           token: ${{ secrets.TOKEN }}
 
-#  update_cmake:
-#    needs: [build_windows, build_linux]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v4
-#
-#      - name: Replace template values
-#        run: |
-#          sed -e "s|<windows_download_link>|${{ needs.build_windows.outputs.win_url }}|g" \
-#              -e "s|<windows_download_sha1>|${{ needs.build_windows.outputs.win_sha1 }}|g" \
-#              -e "s|<linux_download_link>|${{ needs.build_linux.outputs.linux_url }}|g" \
-#              -e "s|<linux_download_sha1>|${{ needs.build_linux.outputs.linux_sha1 }}|g" \
-#              addUiTemplate.cmake > addUI.cmake
-#
-#      - name: Upload addUI.cmake
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: addUI.cmake
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+  update_cmake:
+    needs: [build_windows, build_linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download source code zip
+        run: |
+          curl -LO https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.zip
+
+      - name: Calculate source code SHA1
+        id: source_hash
+        run: |
+          sha1=$(sha1sum ${{ github.ref_name }}.zip | cut -d ' ' -f1)
+          echo "sha1=$sha1" >> $GITHUB_OUTPUT
+
+      - name: Replace template values
+        run: |
+          sed -e "s|<windows_download_link>|${{ needs.build_windows.outputs.win_url }}|g" \
+              -e "s|<windows_download_sha1>|${{ needs.build_windows.outputs.win_sha1 }}|g" \
+              -e "s|<linux_download_link>|${{ needs.build_linux.outputs.linux_url }}|g" \
+              -e "s|<linux_download_sha1>|${{ needs.build_linux.outputs.linux_sha1 }}|g" \
+              -e "s|<source_code_link>|https://github.com/${{ github.repository }}/archive/refs/tags/${{ github.ref_name }}.zip|g" \
+              -e "s|<source_code_sha1>|${{ steps.source_hash.outputs.sha1 }}|g" \
+              addUiTemplate.cmake > addUI.cmake
+
+      - name: Upload addUI.cmake
+        uses: softprops/action-gh-release@v1
+        with:
+          files: addUI.cmake
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
