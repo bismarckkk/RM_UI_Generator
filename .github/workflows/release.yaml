@@ -1,0 +1,118 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    outputs:
+      win_sha1: ${{ steps.hash.outputs.sha1 }}
+      win_url: ${{ steps.set_url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Build
+        shell: pwsh
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          cmake --build . --config Release
+
+      - name: Get executable path
+        id: get_exe
+        shell: pwsh
+        run: |
+          $exePath = Resolve-Path "build/Release/rm_ui_generator.exe"
+          echo "exe_path=$exePath" >> $GITHUB_OUTPUT
+
+      - name: Calculate SHA1
+        id: hash
+        shell: pwsh
+        run: |
+          $hash = (Get-FileHash -Path ${{ steps.get_exe.outputs.exe_path }} -Algorithm SHA1).Hash.ToLower()
+          echo "sha1=$hash" >> $GITHUB_OUTPUT
+
+      - name: Set Windows URL
+        id: set_url
+        run: |
+          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator-windows-x64.exe" >> $GITHUB_OUTPUT
+
+      - name: Upload Windows Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.get_exe.outputs.exe_path }}
+          asset_name: rm_ui_generator-windows-x64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_linux:
+    runs-on: ubuntu-latest
+    outputs:
+      linux_sha1: ${{ steps.hash.outputs.sha1 }}
+      linux_url: ${{ steps.set_url.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake
+
+      - name: Build
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build .
+
+      - name: Get executable path
+        id: get_exe
+        run: |
+          echo "exe_path=build/rm_ui_generator" >> $GITHUB_OUTPUT
+
+      - name: Calculate SHA1
+        id: hash
+        run: |
+          sha1=$(sha1sum ${{ steps.get_exe.outputs.exe_path }} | cut -d ' ' -f 1)
+          echo "sha1=$sha1" >> $GITHUB_OUTPUT
+
+      - name: Set Linux URL
+        id: set_url
+        run: |
+          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator-linux-x64" >> $GITHUB_OUTPUT
+
+      - name: Upload Linux Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.get_exe.outputs.exe_path }}
+          asset_name: rm_ui_generator-linux-x64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#  update_cmake:
+#    needs: [build_windows, build_linux]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Replace template values
+#        run: |
+#          sed -e "s|<windows_download_link>|${{ needs.build_windows.outputs.win_url }}|g" \
+#              -e "s|<windows_download_sha1>|${{ needs.build_windows.outputs.win_sha1 }}|g" \
+#              -e "s|<linux_download_link>|${{ needs.build_linux.outputs.linux_url }}|g" \
+#              -e "s|<linux_download_sha1>|${{ needs.build_linux.outputs.linux_sha1 }}|g" \
+#              addUiTemplate.cmake > addUI.cmake
+#
+#      - name: Upload addUI.cmake
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          files: addUI.cmake
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
