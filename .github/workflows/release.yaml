@@ -43,14 +43,13 @@ jobs:
         id: set_url
         run: |
           echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator_windows_x64.exe" >> $env:GITHUB_OUTPUT
+            mv ${{ steps.get_exe.outputs.exe_path }} rm_ui_generator_windows_x64.exe
 
       - name: Upload Windows Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.get_exe.outputs.exe_path }}
-          asset_name: rm_ui_generator_windows_x64.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          files: rm_ui_generator_windows_x64.exe
+          token: ${{ secrets.TOKEN }}
 
   build_linux:
     runs-on: ubuntu-latest
@@ -87,14 +86,13 @@ jobs:
         id: set_url
         run: |
           echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator_linux_x64" >> $GITHUB_OUTPUT
+          mv ${{ steps.get_exe.outputs.exe_path }} rm_ui_generator_linux_x64
 
       - name: Upload Linux Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.get_exe.outputs.exe_path }}
-          asset_name: rm_ui_generator_linux_x64
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          files: rm_ui_generator_linux_x64
+          token: ${{ secrets.TOKEN }}
 
 #  update_cmake:
 #    needs: [build_windows, build_linux]
