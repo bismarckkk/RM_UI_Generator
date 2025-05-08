@@ -29,28 +29,28 @@ jobs:
         id: get_exe
         shell: pwsh
         run: |
-          $exePath = Resolve-Path "build/Release/rm_ui_generator.exe"
-          echo "exe_path=$exePath" >> $GITHUB_OUTPUT
+          $exePath = Resolve-Path "build\Release\rm_ui_generator.exe"
+          echo "exe_path=$exePath" >> $env:GITHUB_OUTPUT
 
       - name: Calculate SHA1
         id: hash
         shell: pwsh
         run: |
           $hash = (Get-FileHash -Path ${{ steps.get_exe.outputs.exe_path }} -Algorithm SHA1).Hash.ToLower()
-          echo "sha1=$hash" >> $GITHUB_OUTPUT
+          echo "sha1=$hash" >> $env:GITHUB_OUTPUT
 
       - name: Set Windows URL
         id: set_url
         run: |
-          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator-windows-x64.exe" >> $GITHUB_OUTPUT
+          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator_windows_x64.exe" >> $env:GITHUB_OUTPUT
 
       - name: Upload Windows Release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.get_exe.outputs.exe_path }}
-          asset_name: rm_ui_generator-windows-x64.exe
+          asset_name: rm_ui_generator_windows_x64.exe
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
   build_linux:
     runs-on: ubuntu-latest
@@ -86,15 +86,15 @@ jobs:
       - name: Set Linux URL
         id: set_url
         run: |
-          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator-linux-x64" >> $GITHUB_OUTPUT
+          echo "url=https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/rm_ui_generator_linux_x64" >> $GITHUB_OUTPUT
 
       - name: Upload Linux Release
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.get_exe.outputs.exe_path }}
-          asset_name: rm_ui_generator-linux-x64
+          asset_name: rm_ui_generator_linux_x64
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
 
 #  update_cmake:
 #    needs: [build_windows, build_linux]
@@ -115,4 +115,4 @@ jobs:
 #        with:
 #          files: addUI.cmake
 #        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.TOKEN }}
