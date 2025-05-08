@@ -33,6 +33,6 @@ target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${
 
 if (MSVC)
     target_compile_options(rm_ui_generator PRIVATE $<$<CONFIG:Release>:/MT> $<$<CONFIG:Debug>:/MTd>)
-elseif (MINGW)
+elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
     target_link_options(rm_ui_generator PRIVATE -static -static-libgcc -static-libstdc++)
 endif ()
