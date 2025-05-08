@@ -151,6 +151,9 @@ function(verifyGenerator)
 endfunction()
 
 if(ui_compile_generator)
+    if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/rm_ui_generator${CMAKE_EXECUTABLE_SUFFIX}")
+        verifyGenerator()
+    endif ()
     setupGeneratorBuild()
     set(ui_generator_bin "${CMAKE_CURRENT_BINARY_DIR}/generator/bin/rm_ui_generator${CMAKE_EXECUTABLE_SUFFIX}")
     set(ui_compile_generator TRUE)
@@ -175,6 +178,9 @@ else()
         set(ui_generator_bin "${CMAKE_CURRENT_BINARY_DIR}/rm_ui_generator")
         verifyGenerator()
     else ()
+        if (EXISTS "${CMAKE_CURRENT_BINARY_DIR}/rm_ui_generator${CMAKE_EXECUTABLE_SUFFIX}")
+            verifyGenerator()
+        endif ()
         message(STATUS "[UI Gen] Detected unknown system. Building generator from source...")
         setupGeneratorBuild()
         set(ui_generator_bin "${CMAKE_CURRENT_BINARY_DIR}/generator/bin/rm_ui_generator${CMAKE_EXECUTABLE_SUFFIX}")
@@ -248,7 +254,7 @@ function(add_ui TARGET_NAME MODE CONFIG_FILE)
             ${GENERATED_SOURCES}
     )
     target_include_directories(${TARGET_NAME} PUBLIC
-            ${ui_output_dir}/${TARGET_NAME}
+            ${ui_output_dir}
     )
 
     if (ui_compile_generator)

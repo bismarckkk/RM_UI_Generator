@@ -1,2 +1,4 @@
 ui_*
 ui.h
+!ui_types.h
+!ui_interface.h
