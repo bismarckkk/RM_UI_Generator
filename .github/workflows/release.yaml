@@ -106,6 +106,7 @@ jobs:
           files: |
             rm_ui_generator_linux_x64
             wasmBuild/rm_ui_generator.wasm
+            wasmBuild/rm_ui_generator.js
           token: ${{ secrets.TOKEN }}
 
   update_cmake:
