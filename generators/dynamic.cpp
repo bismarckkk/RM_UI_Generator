@@ -42,3 +42,35 @@ void generateDynamic(const fs::path& path, const generatorData& framesData) {
     inja::render_to(ui_h, ui_h_template, data);
     ui_h.close();
 }
+
+nlohmann::json generateDynamicW(const generatorData& framesData) {
+    std::vector<std::string> frames;
+    nlohmann::json res;
+    for (const auto& [frame, objects] : framesData) {
+        frames.push_back(frame);
+        nlohmann::json data;
+        data["frame"] = frame;
+        std::vector<nlohmann::json> objs;
+        std::vector<nlohmann::json> textObjs;
+        for (const auto& obj : objects) {
+            if (obj->type == ObjectType::UiText) {
+                textObjs.push_back(to_data(obj, frame));
+            } else {
+                objs.push_back(to_data(obj, frame));
+            }
+        }
+        data["objs"] = objs;
+        data["textObjs"] = textObjs;
+        auto hs = inja::render(ui_frame_h_template, data);
+        auto cs = inja::render(ui_frame_c_template, data);
+        res[std::format("ui_{}", frame)] = {
+            {"h", hs},
+            {"c", cs}
+        };
+    }
+    const nlohmann::json data({{"frames", frames}});
+    res["ui"] = {
+        {"h", inja::render(ui_h_template, data)}
+    };
+    return nlohmann::json{{"code", res}, {"info", nlohmann::json::array()}};
+}

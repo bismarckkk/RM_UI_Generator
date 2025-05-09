@@ -20,19 +20,40 @@ configure_file(
         ${CMAKE_CURRENT_BINARY_DIR}/inc/lib.hpp
 )
 
-add_executable(
-        rm_ui_generator
-        main.cpp
-        objects/objects.cpp
-        generators/dynamic.cpp
-        generators/static.cpp
-        utils/utils.cpp
-)
-target_compile_definitions(rm_ui_generator PUBLIC -DJSON_DISABLE_ENUM_SERIALIZATION=1)
-target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/inc)
+if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?(.bat|.ps1|.py)?$")
+    message(STATUS " * C++ compiler: Emscripten")
+    set(CMAKE_CXX_COMPILER_ID "Emscripten")
 
-if (MSVC)
-    target_compile_options(rm_ui_generator PRIVATE $<$<CONFIG:Release>:/MT> $<$<CONFIG:Debug>:/MTd>)
-elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
-    target_link_options(rm_ui_generator PRIVATE -static -static-libgcc -static-libstdc++)
-endif ()
+    add_executable(
+            rm_ui_generator
+            designer.cpp
+            objects/objects.cpp
+            generators/dynamic.cpp
+            generators/static.cpp
+            utils/utils.cpp
+    )
+    target_compile_definitions(rm_ui_generator PUBLIC -DJSON_DISABLE_ENUM_SERIALIZATION=1)
+    target_link_options(rm_ui_generator PUBLIC -lembind --emit-tsd generator.d.ts)
+    target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/inc)
+else()
+    message(STATUS " * C++ cimpiler: ${CMAKE_CXX_COMPILER_ID}")
+
+    add_executable(
+            rm_ui_generator
+            main.cpp
+            objects/objects.cpp
+            generators/dynamic.cpp
+            generators/static.cpp
+            utils/utils.cpp
+    )
+    target_compile_definitions(rm_ui_generator PUBLIC -DJSON_DISABLE_ENUM_SERIALIZATION=1)
+    target_include_directories(rm_ui_generator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/inc)
+
+    if (MSVC)
+        target_compile_options(rm_ui_generator PRIVATE $<$<CONFIG:Release>:/MT> $<$<CONFIG:Debug>:/MTd>)
+    elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+        target_link_options(rm_ui_generator PRIVATE -static -static-libgcc -static-libstdc++)
+    endif ()
+endif()
+
+
