@@ -97,7 +97,7 @@ jobs:
         run: |
           mkdir -p wasmBuild
           cd wasmBuild
-          emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+          emcmake cmake -DCMAKE_BUILD_TYPE=MinSizeRel ..
           emmake make
 
       - name: Upload Linux Release
