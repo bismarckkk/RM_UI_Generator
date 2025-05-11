@@ -19,7 +19,7 @@ std::string generate(const std::string& _project, bool static_mode) {
         for (const auto& frame : project.items()) {
             if (!isValidCIdentifier(frame.key())) {
                 info.push_back({
-                    {"type", "error"},
+                    {"level", "Error"},
                     {"message", std::format("Invalid frame name: {}", frame.key())}
                 });
                 return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -32,14 +32,14 @@ std::string generate(const std::string& _project, bool static_mode) {
                         auto ptr = from_json(obj.value());
                         if (!isValidCIdentifier(ptr->group)) {
                             info.push_back({
-                                {"type", "error"},
+                                {"level", "Error"},
                                 {"message", std::format("Invalid frame group: {}", ptr->group)}
                             });
                             return nlohmann::json({{"code", {}}, {"info", info}}).dump();
                         }
                         if (!isValidCIdentifier(ptr->name)) {
                             info.push_back({
-                                {"type", "error"},
+                                {"level", "Error"},
                                 {"message", std::format("Invalid object name: {}", ptr->name)}
                             });
                             return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -47,7 +47,7 @@ std::string generate(const std::string& _project, bool static_mode) {
                         auto groupNamePair = std::make_pair(ptr->group, ptr->name);
                         if (existingPairs.contains(groupNamePair)) {
                             info.push_back({
-                                {"type", "error"},
+                                {"level", "Error"},
                                 {"message", std::format("Duplicate object found in frame {}: group={}, name={}", frame.key(), ptr->group, ptr->name)}
                             });
                             return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -56,7 +56,7 @@ std::string generate(const std::string& _project, bool static_mode) {
                         objs.push_back(ptr);
                     } catch (const std::exception& e) {
                         info.push_back({
-                            {"type", "error"},
+                            {"level", "Error"},
                             {"message", std::format("Failed to parse object {}/{}: {}", frame.key(), obj.key(), e.what())}
                         });
                         return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -64,7 +64,7 @@ std::string generate(const std::string& _project, bool static_mode) {
                 }
             } catch (const std::exception& e) {
                 info.push_back({
-                    {"type", "error"},
+                    {"level", "Error"},
                     {"message", std::format("Failed to parse frame {}: {}", frame.key(), e.what())}
                 });
                 return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -77,7 +77,7 @@ std::string generate(const std::string& _project, bool static_mode) {
         }
     } catch (const std::exception& e) {
         info.push_back({
-            {"type", "error"},
+            {"level", "Error"},
             {"message", std::format("Failed to parse JSON: {}", e.what())}
         });
         return nlohmann::json({{"code", {}}, {"info", info}}).dump();
@@ -94,7 +94,7 @@ std::string generate(const std::string& _project, bool static_mode) {
         return res.dump();
     } catch (const std::exception& e) {
         res["info"].push_back({
-            {"type", "error"},
+            {"level", "Error"},
             {"message", std::format("Failed to generate files: {}", e.what())}
         });
         return res.dump();
