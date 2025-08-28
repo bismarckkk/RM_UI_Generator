@@ -134,7 +134,7 @@ nlohmann::json generateStaticW(const generatorData& framesData) {
         nlohmann::json data = {
             {"frame", frame},
             {"frame_id", frame_id},
-            {"group", nlohmann::json::array()}
+            {"groups", nlohmann::json::array()}
         };
         for (const auto& [group, objects] : groups) {
             frame_data["groups"].emplace_back(group);
