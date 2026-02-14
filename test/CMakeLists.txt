@@ -9,10 +9,10 @@ file(DOWNLOAD
 include(${addUIPath})
 
 set(ui_output_dir "${CMAKE_CURRENT_SOURCE_DIR}/dynamic")
-add_ui(dynamic_ui DYNAMIC ui.rmui)
+add_ui(dynamic_ui DYNAMIC ${CMAKE_CURRENT_SOURCE_DIR}/ui.rmui)
 
 set(ui_output_dir "${CMAKE_CURRENT_SOURCE_DIR}/static")
-add_ui(static_ui STATIC ui.rmui)
+add_ui(static_ui STATIC ${CMAKE_CURRENT_SOURCE_DIR}/ui.rmui)
 
 add_library(serialib utils/serialib.cpp)
 target_include_directories(serialib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/utils)

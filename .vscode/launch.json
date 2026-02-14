@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug rm_ui_generator (CMake)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Debug/rm_ui_generator.exe",
+      "args": ["-s", "-i", "./test/ui.rmui", "g", "default"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "visualizerFile": "${workspaceFolder}/nlohmann_json.natvis"
+    }
+  ]
+}

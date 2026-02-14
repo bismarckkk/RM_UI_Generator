@@ -45,7 +45,7 @@ void generateStatic(const fs::path& path, const generatorData& framesData) {
         nlohmann::json data = {
             {"frame", frame},
             {"frame_id", frame_id},
-            {"group", nlohmann::json::array()}
+            {"groups", nlohmann::json::array()}
         };
         for (const auto& [group, objects] : groups) {
             frame_data["groups"].emplace_back(group);
@@ -55,7 +55,8 @@ void generateStatic(const fs::path& path, const generatorData& framesData) {
                 {"splits", nlohmann::json::array()},
                 {"textSplits", nlohmann::json::array()}
             });
-            for (int split_id = 0; split_id < std::ceil(objects.figure.size() / 7.); split_id++) {
+            const int figure_split_count = (int)std::ceil(objects.figure.size() / 7.0);
+            for (int split_id = 0; split_id < figure_split_count; split_id++) {
                 int offset = split_id * 7;
                 int num = std::min(7, (int)objects.figure.size() - offset);
                 int message_len = 7;
@@ -70,24 +71,30 @@ void generateStatic(const fs::path& path, const generatorData& framesData) {
                     std::cerr << "[UI Gen] [Warn] Length of Frame " << frame <<" Group " << group << " Split "
                               << split_id <<" is not 1 or 2 or 5 or 7." << std::endl;
                 }
-                nlohmann::json _data(data);
-                _data["split_id"] = split_id;
-                _data["start_id"] = offset;
-                _data["message_len"] = message_len;
-                _data["objs"] = nlohmann::json::array();
+                nlohmann::json _data = {
+                    {"frame", frame},
+                    {"frame_id", frame_id},
+                    {"split_id", split_id},
+                    {"start_id", offset},
+                    {"message_len", message_len},
+                    {"objs", nlohmann::json::array()}
+                };
                 for (int i = 0; i < num; i++) {
                     _data["objs"].push_back(to_data(objects.figure[offset + i], frame));
                 }
-                group_data["splits"].push_back(_data);
+                group_data["splits"].push_back(std::move(_data));
             }
             for (int i = 0; i < objects.text.size(); i++) {
                 int offset = (int)objects.figure.size() + i;
-                int split_id = std::ceil(objects.figure.size() / 7.) + i;
-                nlohmann::json _data(data);
-                _data["split_id"] = split_id;
-                _data["start_id"] = offset;
-                _data["obj"] = to_data(objects.text[i], frame);
-                group_data["textSplits"].push_back(_data);
+                int split_id = figure_split_count + i;
+                nlohmann::json _data = {
+                    {"frame", frame},
+                    {"frame_id", frame_id},
+                    {"split_id", split_id},
+                    {"start_id", offset},
+                    {"obj", to_data(objects.text[i], frame)}
+                };
+                group_data["textSplits"].push_back(std::move(_data));
             }
             group_id++;
             data["groups"].push_back(group_data);
@@ -144,7 +151,8 @@ nlohmann::json generateStaticW(const generatorData& framesData) {
                 {"splits", nlohmann::json::array()},
                 {"textSplits", nlohmann::json::array()}
             });
-            for (int split_id = 0; split_id < std::ceil(objects.figure.size() / 7.); split_id++) {
+            const int figure_split_count = (int)std::ceil(objects.figure.size() / 7.0);
+            for (int split_id = 0; split_id < figure_split_count; split_id++) {
                 int offset = split_id * 7;
                 int num = std::min(7, (int)objects.figure.size() - offset);
                 int message_len = 7;
@@ -161,24 +169,30 @@ nlohmann::json generateStaticW(const generatorData& framesData) {
                         {"message", std::format("Length of Frame {} Group {} Split {} is not 1 or 2 or 5 or 7.", frame, group, split_id)}
                     });
                 }
-                nlohmann::json _data(data);
-                _data["split_id"] = split_id;
-                _data["start_id"] = offset;
-                _data["message_len"] = message_len;
-                _data["objs"] = nlohmann::json::array();
+                nlohmann::json _data = {
+                    {"frame", frame},
+                    {"frame_id", frame_id},
+                    {"split_id", split_id},
+                    {"start_id", offset},
+                    {"message_len", message_len},
+                    {"objs", nlohmann::json::array()}
+                };
                 for (int i = 0; i < num; i++) {
                     _data["objs"].push_back(to_data(objects.figure[offset + i], frame));
                 }
-                group_data["splits"].push_back(_data);
+                group_data["splits"].push_back(std::move(_data));
             }
             for (int i = 0; i < objects.text.size(); i++) {
                 int offset = (int)objects.figure.size() + i;
-                int split_id = std::ceil(objects.figure.size() / 7.) + i;
-                nlohmann::json _data(data);
-                _data["split_id"] = split_id;
-                _data["start_id"] = offset;
-                _data["obj"] = to_data(objects.text[i], frame);
-                group_data["textSplits"].push_back(_data);
+                int split_id = figure_split_count + i;
+                nlohmann::json _data = {
+                    {"frame", frame},
+                    {"frame_id", frame_id},
+                    {"split_id", split_id},
+                    {"start_id", offset},
+                    {"obj", to_data(objects.text[i], frame)}
+                };
+                group_data["textSplits"].push_back(std::move(_data));
             }
             group_id++;
             data["groups"].push_back(group_data);
