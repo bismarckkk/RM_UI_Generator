@@ -1,4 +1,4 @@
-#include "dynamic_ui/ui.h"
+#include "static_ui/ui.h"
 #include "serialib.h"
 #include "serial.h"
 

@@ -14,8 +14,8 @@ int main() {
 
     for (int i = 0; i < 100; i++) {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        ui_g_Ungroup_NewRect8->end_x -= 2;
-        ui_g_Ungroup_NewRect8_dirty = 1;
+        int new_end_x = ui_g_Ungroup_NewRect8->end_x - 2;
+        ui_set(ui_g_Ungroup_NewRect8, end_x, new_end_x);
         ui_update_g();
     }
 

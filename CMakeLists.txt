@@ -57,4 +57,74 @@ else()
     endif ()
 endif()
 
+function(add_ui TARGET_NAME MODE CONFIG_FILE)
+    if(${ARGC} EQUAL 3)
+        set(FRAMES "default")
+    else()
+        set(FRAMES ${ARGN})
+    endif()
+
+    string(TOLOWER ${MODE} MODE)
+    if (MODE STREQUAL "static")
+        set(UI_STATIC "--static")
+    elseif (MODE STREQUAL "dynamic")
+        set(UI_STATIC "")
+    else()
+        message(FATAL_ERROR "[UI Gen] Invalid mode: ${MODE}. Use 'static' or 'dynamic'.")
+    endif()
+
+    if(NOT DEFINED ui_output_dir)
+        set(ui_output_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
+    endif()
+
+    set(
+            GENERATED_SOURCES
+            ${ui_output_dir}/${TARGET_NAME}/ui.h
+            ${ui_output_dir}/${TARGET_NAME}/ui_types.h
+            ${ui_output_dir}/${TARGET_NAME}/ui_interface.h
+            ${ui_output_dir}/${TARGET_NAME}/ui_interface.c
+    )
+
+    list(FIND FRAMES "default" DEFAULT_INDEX)
+    list(LENGTH FRAMES FRAMES_LENGTH)
+    if(DEFAULT_INDEX GREATER_EQUAL 0 AND FRAMES_LENGTH EQUAL 1)
+        list(APPEND GENERATED_SOURCES
+                ${ui_output_dir}/${TARGET_NAME}/ui_g.c
+                ${ui_output_dir}/${TARGET_NAME}/ui_g.h
+        )
+    else()
+        foreach(FRAME ${FRAMES})
+            list(APPEND GENERATED_SOURCES
+                    ${ui_output_dir}/${TARGET_NAME}/ui_${FRAME}.c
+                    ${ui_output_dir}/${TARGET_NAME}/ui_${FRAME}.h
+            )
+        endforeach()
+    endif()
+
+    add_custom_command(
+            OUTPUT ${GENERATED_SOURCES}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${ui_output_dir}
+            COMMAND $<TARGET_FILE:rm_ui_generator>
+                --input-file ${CONFIG_FILE}
+                --output-dir ${ui_output_dir}/${TARGET_NAME}
+                ${UI_STATIC}
+                ${FRAMES}
+            DEPENDS
+                ${CONFIG_FILE}
+                rm_ui_generator
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
+
+    set_source_files_properties(${GENERATED_SOURCES} PROPERTIES GENERATED TRUE)
+
+    add_library(${TARGET_NAME} STATIC
+            ${GENERATED_SOURCES}
+    )
+    target_include_directories(${TARGET_NAME} PUBLIC
+            ${ui_output_dir}
+    )
+endfunction()
+
+add_subdirectory(test)
+
 

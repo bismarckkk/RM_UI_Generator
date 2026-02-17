@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
 project(rm_ui_generator_test)
 
-set(addUIPath "${CMAKE_CURRENT_BINARY_DIR}/addUI.cmake")
-file(DOWNLOAD
-        https://github.com/bismarckkk/RM_UI_Generator/releases/latest/download/addUI.cmake
-        ${addUIPath}
-)
-include(${addUIPath})
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+        set(addUIPath "${CMAKE_CURRENT_BINARY_DIR}/addUI.cmake")
+        file(DOWNLOAD
+                        https://github.com/bismarckkk/RM_UI_Generator/releases/latest/download/addUI.cmake
+                        ${addUIPath}
+        )
+        include(${addUIPath})
+elseif(NOT COMMAND add_ui)
+        message(FATAL_ERROR "[UI Gen] add_ui is not defined. Configure from project root or include addUI.cmake first.")
+endif()
 
 set(ui_output_dir "${CMAKE_CURRENT_SOURCE_DIR}/dynamic")
 add_ui(dynamic_ui DYNAMIC ${CMAKE_CURRENT_SOURCE_DIR}/ui.rmui)

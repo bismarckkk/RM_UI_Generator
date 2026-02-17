@@ -17,6 +17,11 @@ void print_message(const uint8_t* message, int length);
 #define SEND_MESSAGE(message, length) write(message, length)
 // User Code End
 
+#define ui_set(obj, field, value) { \
+    obj->field = value; \
+    obj##_dirty = obj##_max_send_count; \
+}
+
 void ui_proc_1_frame(ui_1_frame_t *msg);
 void ui_proc_2_frame(ui_2_frame_t *msg);
 void ui_proc_5_frame(ui_5_frame_t *msg);

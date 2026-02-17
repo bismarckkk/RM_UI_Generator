@@ -28,6 +28,17 @@ ui_interface_string_t ui_{{ frame }}_now_strings[TOTAL_STRING];
 uint8_t ui_{{ frame }}_dirty_string[TOTAL_STRING];
 ## endif
 
+## if length(objs) + length(textObjs) != 0
+uint8_t ui_{{ frame }}_max_send_count[TOTAL_FIGURE + TOTAL_STRING] = {
+## for obj in objs
+    1,
+## endfor
+## for obj in textObjs
+    1,
+## endfor
+};
+## endif
+
 #ifndef MANUAL_DIRTY
 ## if length(objs) != 0
 ui_interface_figure_t ui_{{ frame }}_last_figures[TOTAL_FIGURE];
@@ -99,7 +110,7 @@ void ui_update_{{ frame }}() {
 ## if length(objs) != 0
     for (int i = 0; i < TOTAL_FIGURE; i++) {
         if (memcmp(&ui_{{ frame }}_now_figures[i], &ui_{{ frame }}_last_figures[i], sizeof(ui_{{ frame }}_now_figures[i])) != 0) {
-            ui_{{ frame }}_dirty_figure[i] = 1;
+            ui_{{ frame }}_dirty_figure[i] = ui_{{ frame }}_max_send_count[i];
             ui_{{ frame }}_last_figures[i] = ui_{{ frame }}_now_figures[i];
         }
     }
@@ -107,7 +118,7 @@ void ui_update_{{ frame }}() {
 ## if length(textObjs) != 0
     for (int i = 0; i < TOTAL_STRING; i++) {
         if (memcmp(&ui_{{ frame }}_now_strings[i], &ui_{{ frame }}_last_strings[i], sizeof(ui_{{ frame }}_now_strings[i])) != 0) {
-            ui_{{ frame }}_dirty_string[i] = 1;
+            ui_{{ frame }}_dirty_string[i] = ui_{{ frame }}_max_send_count[TOTAL_FIGURE + i];
             ui_{{ frame }}_last_strings[i] = ui_{{ frame }}_now_strings[i];
         }
     }

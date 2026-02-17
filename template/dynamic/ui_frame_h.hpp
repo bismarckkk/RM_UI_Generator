@@ -26,12 +26,24 @@ extern ui_interface_string_t ui_{{ frame }}_now_strings[{{ length(textObjs) }}];
 extern uint8_t ui_{{ frame }}_dirty_string[{{ length(textObjs) }}];
 ## endif
 
+## if length(objs) + length(textObjs) != 0
+extern uint8_t ui_{{ frame }}_max_send_count[{{ length(objs) + length(textObjs) }}];
+## endif
+
 ## for obj in objs
 #define {{ obj.name }} (({{ obj.type }}*)&(ui_{{ frame }}_now_figures[{{ loop.index }}]))
 ## endfor
 
 ## for obj in textObjs
 #define {{ obj.name }} (&(ui_{{ frame }}_now_strings[{{ loop.index }}]))
+## endfor
+
+## for obj in objs
+#define {{ obj.name }}_max_send_count (ui_{{ frame }}_max_send_count[{{ loop.index }}])
+## endfor
+
+## for obj in textObjs
+#define {{ obj.name }}_max_send_count (ui_{{ frame }}_max_send_count[{{ loop.index + length(objs) }}])
 ## endfor
 
 #ifdef MANUAL_DIRTY
