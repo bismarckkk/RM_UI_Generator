@@ -41,6 +41,11 @@ if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?(.bat|.ps1|.py)?$")
 else()
     message(STATUS " * C++ cimpiler: ${CMAKE_CXX_COMPILER_ID}")
 
+    if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+        set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+        message(STATUS " * CMAKE_BUILD_TYPE not set, defaulting to Release")
+    endif()
+
     add_executable(
             rm_ui_generator
             main.cpp
