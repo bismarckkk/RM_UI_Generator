@@ -3,6 +3,8 @@ project(rm_ui_generator)
 
 set(CMAKE_CXX_STANDARD 20)
 
+option(RM_UI_GENERATOR_BUILD_TESTS "Build test subdirectory" OFF)
+
 function(read_file path var)
     file(READ ${path} content)
     set(${var} "${content}" PARENT_SCOPE)
@@ -125,6 +127,6 @@ function(add_ui TARGET_NAME MODE CONFIG_FILE)
     )
 endfunction()
 
-add_subdirectory(test)
-
-
+if(RM_UI_GENERATOR_BUILD_TESTS)
+    add_subdirectory(test)
+endif()
